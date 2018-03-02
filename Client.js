@@ -21,8 +21,12 @@ class Client {
             debug('[TCP ERROR]', err.code )
             this.launchIntervalConnect()
         })
-        this._client.on('close', this.launchIntervalConnect)
-        this._client.on('end', this.launchIntervalConnect)
+        this._client.on('close', () => {
+            this.launchIntervalConnect()
+        })
+        this._client.on('end', () => {
+            this.launchIntervalConnect()
+        })
     }
 
     connect() {
