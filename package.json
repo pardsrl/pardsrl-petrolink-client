@@ -5,8 +5,9 @@
   "description": "TCP client for Petrolink server",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
     "start": "DEBUG=pardsrl-petrolink:* node index.js",
-    "dev": "DEBUG=pardsrl-petrolink:* nodemon index.js",
+    "dev": "DEBUG=pardsrl-petrolink:* DATAFILE=./example/test.txt nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,9 +22,11 @@
   "homepage": "https://github.com/pardsrl/pardsrl-petrolink-client#readme",
   "dependencies": {
     "chalk": "^2.3.1",
+    "chokidar": "^2.0.2",
     "debug": "^3.1.0"
   },
   "devDependencies": {
-    "nodemon": "^1.17.1"
+    "nodemon": "^1.17.1",
+    "standard": "^11.0.0"
   }
 }
