@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "start": "DEBUG=pardsrl-petrolink:* node index.js",
+    "start": "node index.js",
     "dev": "DEBUG=pardsrl-petrolink:* nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
