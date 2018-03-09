@@ -8,18 +8,20 @@ const chokidar = require('chokidar')
 
 const Client = require('./Client')
 const { parseToWits } = require('./lib')
+const { server, sensors} = require('./config')
+
 
 /* Client connection */
 /* --------------------------------------------- */
 
 let client = new Client({
-  host: process.env.HOST || '127.0.0.1',
-  port: process.env.PORT || 9000
+  host: server.host,
+  port: server.port
 })
 
 let clientConnected = false
 
-let dataFileWatcher = chokidar.watch(process.env.DATAFILE)
+let dataFileWatcher = chokidar.watch(sensors.file)
 
 dataFileWatcher.on('change', (file) => {
   debug(chalk.yellow('FILE'),`File ${file} has changed`)

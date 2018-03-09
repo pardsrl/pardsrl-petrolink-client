@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "standard",
     "start": "DEBUG=pardsrl-petrolink:* node index.js",
-    "dev": "DEBUG=pardsrl-petrolink:* DATAFILE=./example/test.txt nodemon index.js",
+    "dev": "DEBUG=pardsrl-petrolink:* nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

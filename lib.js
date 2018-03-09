@@ -1,16 +1,13 @@
 'use strict'
 
+const { sensors} = require('./config')
+
+
 // Wits General time based record
 let record = '01'
 
 // Wits channels
-let pardToWits = {
-  'hta': '01',
-  'anem': '02',
-  'bpozo': '03',
-  'llave': '04',
-  'haparejo': '05'
-}
+let pardToWits = sensors.wits0
 
 /**
  * Convert pardsrl json data to wits representation
