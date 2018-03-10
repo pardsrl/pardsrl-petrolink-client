@@ -6,11 +6,17 @@ const config = {
     sensors:{
         file: process.env.DATAFILE || './example/test.txt',
         wits0: {
-            hta:      '01',
-            anem:     '02',
-            bpozo:    '03',
-            llave:    '04',
-            haparejo: '05'
+            t:        '99',
+            hta:      '14',
+            anem:     '45',
+            bpozo:    '22',
+            llave:    '46',
+            haparejo: '12',
+            piza:     '47',
+            pistoneo: '48',
+            embolada: '23',
+            torque:   '18'
+
         }
     }
 }
