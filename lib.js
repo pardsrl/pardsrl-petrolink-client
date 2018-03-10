@@ -21,11 +21,12 @@ function parseToWits (pardJSON) {
 
     let elements = []
 
-    for (const key in pardJSON) {
-      if (pardJSON.hasOwnProperty(key)) {
-        const value = pardJSON[key]
-        const channel = pardToWits[key]
+    let data = pardJSON[0]
 
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const value = data[key]
+        const channel = pardToWits[key]
         channel && elements.push(`${record}${channel}${value}`)
       }
     }
