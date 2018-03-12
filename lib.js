@@ -21,7 +21,7 @@ function parseToWits (pardJSON) {
 
     let elements = []
 
-    let data = pardJSON[0]
+    let data = pardJSON
 
     for (const key in data) {
       if (data.hasOwnProperty(key)) {

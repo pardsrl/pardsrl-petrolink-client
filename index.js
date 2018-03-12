@@ -1,17 +1,19 @@
 
 'use strict'
 
-const fs = require('fs')
 const chalk = require('chalk')
 const debug = require('debug')('pardsrl-petrolink:index')
-const chokidar = require('chokidar')
 
 const Client = require('./Client')
 const { parseToWits } = require('./lib')
-const { server, sensors} = require('./config')
+const { server, sensors, redis} = require('./config')
 
+const redisClient = require('redis').createClient({
+  host: redis.host,
+  port: redis.port
+})
 
-/* Client connection */
+/* Socket Client connection */
 /* --------------------------------------------- */
 
 let client = new Client({
@@ -21,23 +23,37 @@ let client = new Client({
 
 let clientConnected = false
 
-let dataFileWatcher = chokidar.watch(sensors.file)
+redisClient.on('connect', () => {
+  debug(chalk.blue('[REDIS]'), 'Redis connected to server.')
+})
 
-dataFileWatcher.on('change', (file) => {
-  debug(chalk.yellow('FILE'),`File ${file} has changed`)
-
+function waitForPush () {
   if (clientConnected) {
-    fs.readFile(file, 'utf8', async (err, data) => {
+    redisClient.brpop(redis.queue, 0, async (err, data) => {
       if (err) handleError(err)
 
-      let witsPacket = await parseToWits(data).catch(handleError)
-      witsPacket && client.write(witsPacket)
+      if (data) {
+        debug(chalk.blue('[REDIS DATA]'), err, data)
+
+        let objStream = data[1]
+
+        let witsPacket = await parseToWits(objStream).catch(handleError)
+
+        if (clientConnected) {
+          witsPacket && client.write(witsPacket)
+          waitForPush()
+        } else {
+          // No envío el paquete y lo dejo en una lista de perdidos para posterior control
+          redisClient.lpush('lost', objStream)
+        }
+      }
     })
   }
-})
+}
 
 client.on('connect', () => {
   clientConnected = true
+  waitForPush()
 })
 
 client.on('error', () => {
