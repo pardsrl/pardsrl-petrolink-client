@@ -60,6 +60,14 @@ client.on('error', () => {
   clientConnected = false
 })
 
+client.on('close', () => {
+  clientConnected = false
+})
+
+client.on('end', () => {
+  clientConnected = false
+})
+
 function handleError (err) {
   debug(`[Error] ${err.message}`)
 }
