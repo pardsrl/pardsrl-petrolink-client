@@ -24,14 +24,22 @@ class Client extends EventEmitter {
       this.launchIntervalConnect()
       this.emit('error')
     })
-    this._client.on('close', () => {
+    this._client.on('close', (err) => {
+      debug(`${chalk.red('[TCP CLOSE]')}`, err)
       this.launchIntervalConnect()
       this.emit('close')
     })
-    this._client.on('end', () => {
+    this._client.on('end', (err) => {
+      debug(`${chalk.red('[TCP END]')}`, err)
       this.launchIntervalConnect()
       this.emit('end')
     })
+
+
+    this._client.on('timeout', () => {
+      debug(`${chalk.red('[SOCKET TIMEOUT]')}`)
+      this._client.end();
+    });
   }
 
   connect () {
@@ -41,6 +49,8 @@ class Client extends EventEmitter {
       host: this._config.host,
       port: this._config.port
     })
+    
+    this._client.setTimeout(10000);
   }
 
   write (data) {
