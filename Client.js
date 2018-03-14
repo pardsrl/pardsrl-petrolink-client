@@ -1,6 +1,8 @@
 'use strict'
 
 const net = require('net')
+var NetSocket = require('net-keepalive')
+
 const EventEmitter = require('events')
 const debug = require('debug')('pardsrl-petrolink:client')
 const chalk = require('chalk')
@@ -13,6 +15,13 @@ class Client extends EventEmitter {
     this._intervalConnect = false
 
     this._client.on('connect', () => {
+      //enable keep alive and start probing after 1 second of inactivity
+      this._client.setKeepAlive(true,1000)
+      //after initialDuration send probes every 1 second
+      NetSocket.setKeepAliveInterval(this._client, 1000) 
+      //after 10 failed probes connection will be dropped
+      NetSocket.setKeepAliveProbes(this._client, 10)
+
       this.clearIntervalConnect()
       debug(`${chalk.green('[TCP]')}`, 'connected to server')
       this.emit('connect')
@@ -20,6 +29,7 @@ class Client extends EventEmitter {
     })
 
     this._client.on('error', (err) => {
+      this._client.end();
       debug(`${chalk.red('[TCP ERROR]')}`, err.message)
       this.launchIntervalConnect()
       this.emit('error')
@@ -49,8 +59,6 @@ class Client extends EventEmitter {
       host: this._config.host,
       port: this._config.port
     })
-    
-    this._client.setTimeout(10000);
   }
 
   write (data) {
