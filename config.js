@@ -6,7 +6,7 @@ const config = {
   sensors: {
     file: process.env.DATAFILE || './example/test.txt',
     wits0: {
-      t: '99',
+      t: '98',
       hta: '14',
       anem: '45',
       bpozo: '22',
